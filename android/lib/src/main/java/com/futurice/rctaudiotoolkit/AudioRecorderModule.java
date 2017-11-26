@@ -275,6 +275,22 @@ public class AudioRecorderModule extends ReactContextBaseJavaModule implements
         }
     }
 
+    @ReactMethod
+    public void getMaxAmplitude(Integer recorderId, Callback callback) {
+        MediaRecorder recorder = this.recorderPool.get(recorderId);
+        if (recorder == null) {
+            callback.invoke(errObj("notfound", "recorderId " + recorderId + "not found."));
+            return;
+        }
+
+        try {
+            int maxAmplitude = recorder.getMaxAmplitude();
+            callback.invoke(null, maxAmplitude);
+        } catch (Exception e) {
+            callback.invoke(errObj("maxamplitudefail", e.toString()));
+        }
+    }
+    
     // Find recorderId matching recorder from recorderPool
     private Integer getRecorderId(MediaRecorder recorder) {
         for (Entry<Integer, MediaRecorder> entry : recorderPool.entrySet()) {

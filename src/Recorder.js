@@ -119,6 +119,14 @@ class Recorder extends EventEmitter {
     return this;
   }
 
+  getMaxAmplitude(callback = _.noop) {
+    RCTAudioRecorder.getMaxAmplitude(this._recorderId, (err, maxAmplitude) => {
+      callback(err, maxAmplitude)
+    });
+
+    return this;
+  }
+
   toggleRecord(callback = _.noop) {
     if (this._state === MediaStates.RECORDING) {
       this.stop((err) => {
