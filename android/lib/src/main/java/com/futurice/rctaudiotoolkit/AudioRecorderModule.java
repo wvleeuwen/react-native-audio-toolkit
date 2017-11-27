@@ -179,8 +179,38 @@ public class AudioRecorderModule extends ReactContextBaseJavaModule implements
         //MediaRecorder recorder = MediaRecorder.create(this.context, uri, null, attributes);
         MediaRecorder recorder = new MediaRecorder();
 
-        // TODO: allow configuring?
-        recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+        int audioSource = MediaRecorder.AudioSource.DEFAULT;
+        if (options.hasKey("audioSource")) {
+          switch(options.getString("audioSource")){
+            case "camcorder":
+              audioSource = MediaRecorder.AudioSource.CAMCORDER;
+              break;
+            case "mic":
+              audioSource = MediaRecorder.AudioSource.MIC;
+              break;
+            case "remote_submix":
+              audioSource = MediaRecorder.AudioSource.REMOTE_SUBMIX;
+              break;
+            case "voice_call":
+              audioSource = MediaRecorder.AudioSource.VOICE_CALL;
+              break;
+            case "voice_communication":
+              audioSource = MediaRecorder.AudioSource.VOICE_COMMUNICATION;
+              break;
+            case "voice_downlink":
+              audioSource = MediaRecorder.AudioSource.VOICE_DOWNLINK;
+              break;
+            case "voice_recognition":
+              audioSource = MediaRecorder.AudioSource.VOICE_RECOGNITION;
+              break;
+            case "voice_uplink":
+              audioSource = MediaRecorder.AudioSource.VOICE_UPLINK;
+              break;
+            default: 
+              audioSource = MediaRecorder.AudioSource.DEFAULT;
+          }
+        }
+        recorder.setAudioSource(audioSource);
 
         int format = formatFromPath(path);
         int encoder = encoderFromPath(path);
