@@ -314,8 +314,8 @@ public class AudioRecorderModule extends ReactContextBaseJavaModule implements
         }
 
         try {
-            int maxAmplitude = recorder.getMaxAmplitude();
-            callback.invoke(null, maxAmplitude);
+            double amplitude = recorder.getMaxAmplitude() / 32767.0;
+            callback.invoke(null, amplitude);
         } catch (Exception e) {
             callback.invoke(errObj("maxamplitudefail", e.toString()));
         }
