@@ -125,6 +125,7 @@ RCT_EXPORT_METHOD(prepare:(nonnull NSNumber *)recorderId
         callback(@[dict]);
         return;
     }
+    [recorder setMeteringEnabled:YES];
     
     callback(@[[NSNull null], filePath]);
 }
@@ -155,6 +156,19 @@ RCT_EXPORT_METHOD(stop:(nonnull NSNumber *)recorderId withCallback:(RCTResponseS
         return;
     }
     callback(@[[NSNull null]]);
+}
+
+RCT_EXPORT_METHOD(getMaxAmplitude:(nonnull NSNumber *)recorderId withCallback:(RCTResponseSenderBlock)callback) {
+    AVAudioRecorder *recorder = [[self recorderPool] objectForKey:recorderId];
+    if (recorder) {
+        [recorder updateMeters];
+        NSNumber* linear = [NSNumber numberWithDouble:pow (10, [recorder peakPowerForChannel:0] / 20)];
+        callback(@[[NSNull null], linear]);
+    } else {
+        NSDictionary* dict = [Helpers errObjWithCode:@"notfound" withMessage:@"Recorder with that id was not found"];
+        callback(@[dict]);
+        return;
+    }
 }
 
 RCT_EXPORT_METHOD(destroy:(nonnull NSNumber *)recorderId withCallback:(RCTResponseSenderBlock)callback) {
